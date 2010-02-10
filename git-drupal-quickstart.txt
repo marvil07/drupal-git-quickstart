@@ -1,0 +1,259 @@
+= Durpal git quickstart =
+
+This is a git analogous of the drupal quickstart handbook for CVS.
+
+== Before you start ==
+
+//TODO link to an analogous of CVS introduction http://drupal.org/handbook/cvs/introduction
+
+Before you get started, you really should understand some basic concepts about Revision Control Systems, of which git is one. Please read the http://TODO[git Introduction] and make sure you have a basic understanding before proceeding, particularly pay attention to the concepts of branches and tags.
+
+Take some time to figure out the directory structure for your module, it helps(but renaming files in DVCS is easy ;-)).
+
+When your module is ready for release, you'll need to apply for a http://drupal.org/cvs-application/requirements[contrib account]. Please note that you can work in your own git-clone's of projects you want to hack/help. Also, note that you will need to create your project page on drupal.org if you want to create a new module. Check the http://drupal.org/node/100748[step-by-step guide to creating new projects] for more information.
+
+== Basics ==
+
+=== Who are you? ===
+
+When you want to start working on a repo(aka commit) you want your changes are authored by your right information.
+
+Make sure git knows who to blame, by editing '$HOME/.gitconfig':
+
+    [user]
+            name = Your Name Comes Here
+            email = you@yourdomain.example.com
+
+=== Adding a new module to contrib ===
+
+Probably you now have a functional module versioned in git, if so jump to
+
+==== Starting your module ====
+
+The next assumes you have a minimal module running(probably only a full *.info and an empty *.module files)
+
+[source,shell]
+----
+cd /path/to/your/module/yourawesomemodule
+git init
+git add .
+git commit -m "Starting yourawesomemodule"
+----
+
+==== Making your module avalaible in git.drupal.org ====
+
+1. create a module project page(that will handle the creeation of your empty repo in git.drupal.org)
+
+2. Actually push your changes
+
+[source,shell]
+----
+cd /path/to/your/module/yourawesomemodule
+git remote add origin gitosis@git.drupal.org:yourawesomemodule.git
+git push origin master
+----
+
+=== Saving changes to your module ===
+
+Bugs and features are tracked in your project's http://drupal.org/project/issues[issue queue]. It is customary in the http://drupal.org/node/52287[commit message] to reference the node ID of the issue where the bug/feature request was raised, and mention any contributors who helped with the code(probably not commit authors). After making the changes in your local repository, you need to commit them to the git repository:
+
+[source,shell]
+----
+git commit -m "#12345 by username: Brief description of changes."
+----
+
+If you're adding some new files you need to do this before commiting:
+
+[source,shell]
+----
+git add file1.inc images/image1.png
+----
+
+=== Obtaining latest changes ===
+
+Both before you begin editing and before you save your changes, it's a good idea to grab the latest changes from git with the update command:
+
+[source,shell]
+----
+git pull
+----
+
+=== Removing files from git ===
+
+Sometimes a newer version of a module doesn't require a certain file anymore. If this file is 'foo.bar.inc', you need the following command to remove it:
+
+[source,shell]
+----
+git rm foo.bar.inc
+git commit -m "some sort of a message as to why you removed the file"
+git push
+----
+
+Like 'git add', 'git rm' tells CVS you want to remove the file, and it isn't actually removed until the 'git commit'. 
+
+
+== Branching and tagging ==
+
+git allows you to keep different versions of your code active on different branches, and to tag different versions of your code. Drupal modules use git branches and tags in very specific ways, which are described fully on other pages:
+
+- Read the http://TODO[git Introduction] if you do not understand what CVS branches and tags are.
+- Read the http://drupal.org/node/93999[Release tags and version numbers] page to learn how Drupal modules should tie git branch and tag IDs to released versions.
+
+The sections below cover the git commands used for branching and tagging, and assume you have already figured out why you are branching and tagging, and what branch/tag ID you want to use.
+
+=== Before branching or tagging ===
+
+If you have just made the initial commit to a new module, you should have created a project on drupal.org before you started. If you didn't, do that now, before before proceeding with creating a branch or tag.
+
+Before you enter the command to create a tag or branch, verify that the directory you're about to tag has the correct version of your code in it, that the code has been committed, and if you are tagging, that you are on the correct branch. In order to create a new branch, first change to the HEAD branch, and create your new branch as a copy of the HEAD branch, as shown in the examples below.
+
+=== Branching for a specific Drupal core version ===
+
+Branching indicates the code's compatibility with Drupal core. For more information on when to branch and why, read the http://drupal.org/node/93999[overview of contributions branches and tags] documentation.
+
+For example, if you want to create a branch called "DRUPAL-6--1" based on the contents of actual master, you would use the following commands:
+
+[source,shell]
+----
+git checkout -b DRUPAL-6--1 master
+----
+
+That also switch you to your new branch
+
+Now you want to make some commits in that branch(no necessary now).
+
+And then put the branch on git.drupal.org:
+
+[source,shell]
+----
+git push origin DRUPAL-6--1
+----
+
+You can check which branch you are currently using by issuing a status command:
+
+[source,shell]
+----
+git status
+----
+
+Also maybe you want to modify your $PS1 (google for __git_ps1 ;-))
+
+You can go back to using the HEAD(master) branch by issuing this command:
+
+[source,shell]
+----
+git checkout master
+----
+
+=== Creating an official release ===
+
+Once your module is stable, it's time to create an official release for it. Just as Drupal comes out with 5.0, 5.1, and such, you can (and should!) do this with your module. You do that by tagging your code.
+
+Assuming you are already using the correct branch (see above), and that all of your changes have been committed, you can tag your code with DRUPAL-6--1-0 (the correct tag for the 6.x-1.0 release) with the following commands:
+
+[source,shell]
+----
+cd /path/to/your/module/yourawesomemodule
+git tag DRUPAL-6--1-0
+----
+
+You also can add a message to the tag, but not necesarry.
+
+After tagging the module for your release, you also need to http://drupal.org/node/94151[create a release node] for it, so that it shows up in the list of downloads on your project page on drupal.org.
+
+Note that normally, releases should only be made after major bug fixes or security patches; not for minor bugs like whitespace fixes, small text fixes, and so on.
+
+NOTE: If you find a security bug, please report the vulnerability to the http://drupal.org/security-team[Security team] and do not commit fixes for the security vulnerability until told to do so by the security team. This gives the security team time to send an announcement out via the security newsletter and to make sure that the proposed fix for the bug actually fixes the security vulnerability.
+
+=== Branching for new development versions of your module ===
+
+Once a stable release of a module is created, you may want to continue to add features, leaving the original release of your module intact.
+
+To create a branch for a new major version of your module (for example, version 2.0 of the Drupal 6.0 compatible version of your module), use the following commands:
+
+[source,shell]
+----
+cd /path/to/your/module/yourawesomemodule
+git checkout -b DRUPAL-6--2 master
+----
+
+Eventually, when version 2.0 is ready to be released you would tag the 2.0 version using the following commands:
+
+[source,shell]
+----
+cd /path/to/your/module/yourawesomemodule
+git checkout DRUPAL-6--2
+git pull
+git tag DRUPAL-6--2-0
+----
+
+Now you have the tag in your local repo, so push it to git.drupal.org
+
+[source,shell]
+----
+git push --tags
+----
+
+You may want to edit your project node and click the 'releases' subtab and bump the major release also.
+
+=== Creating a development snapshot release of your module ===
+
+In order to allow people to test your module while it is in development, you may wish to make a development snapshot. This will create a "dev" snapshot which will always point to the newest version of the module in a particular branch.
+
+To do so, make sure that the module is branched for the appropriate Drupal core version, and then http://drupal.org/node/94151[create a release node] pointing to that branch, rather than a specific release tag.
+
+NOTE: Developer snapshots are only generated 2 times per day.
+
+=== Deleting a tag ===
+
+Note that it's a very bad idea to delete a branch once you have started committing changes to it.
+
+Release nodes on drupal.org are typically never deleted. For more info about this please read the handbook page on http://drupal.org/node/128614[Fixing releases]. If you believe that it really is necessary to delete a release node, please http://drupal.org/node/add/project_issue/webmasters[submit an issue] to the drupal.org webmasters queue, and one of the http://drupal.org/site-maintainers[site maintainers] will be able to delete the release node from drupal.org, but only if there is a very good reason for it.
+
+**Not sure about the this paragraph** In the event that there is a drupal.org release node pointing to the tag or branch you're trying to delete, CVS will display an error when you attempt to run these commands. You will need to first get the release deleted by filing an issue as indicated above, then delete the tag or branch; then create the tag or branch, and then re-create the release.
+
+To delete a tag that was created in error, use the command:
+
+[source,shell]
+----
+git tag -d DRUPAL-5--1-0
+----
+
+If you need to delete a branch that was created in error, use the command:
+
+[source,shell]
+----
+git checkout some_branch_that_is_not_the_brach_being_deleted
+git branch -D DRUPAL-5
+----
+
+=== Saving changes to multiple branches ===
+
+When you commit bug fixes, if they span more than one version, they need to be committed to each affected branch.
+
+So for example, if you have a '4.7.x-1.x' and '4.7.x-2.x' and '5.x-1.x' version of your module, changes that affect both the '4.7.x' and '5.x' versions need to be committed to the 'DRUPAL-4-7', 'DRUPAL-4-7--2', and 'DRUPAL-5' branches.
+
+So, first you committed the change on the 'DRUPAL-5' branch. Let see what's the commit id for your change:
+
+[source,shell]
+----
+git log -1 DRUPAL-5
+----
+
+That will give you something like:
+
+    commit 3b9f8faf060f0098e98478a9016339f5602fd6f5
+    Author: Your name <your@mail>
+    Date:   Wed Feb 10 14:37:07 2010 -0500
+
+        the message
+
+The commit id is '3b9f8faf060f0098e98478a9016339f5602fd6f5'(notice we use only 7 chars instead of hte whole sha because there is a little probability that you have another sha with that start :-)), now let's apply it to the other branches
+
+[source,shell]
+----
+git checkout DRUPAL-4-7
+git cherry-pick 3b9f8fa
+git checkout DRUPAL-4-7--2
+git cherry-pick 3b9f8fa
+----
