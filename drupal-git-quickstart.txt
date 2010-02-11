@@ -61,7 +61,8 @@ Bugs and features are tracked in your project's http://drupal.org/project/issues
 
 [source,shell]
 ----
-git commit -m "#12345 by username: Brief description of changes."
+git commit -a -m "#12345 by username: Brief description of changes."
+git push
 ----
 
 If you're adding some new files you need to do this before commiting:
