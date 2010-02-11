@@ -18,11 +18,13 @@ When your module is ready for release, you'll need to apply for a http://drupal.
 
 When you want to start working on a repo(aka commit) you want your changes are authored by your right information.
 
-Make sure git knows who to blame, by editing '$HOME/.gitconfig':
+Make sure git knows who to blame, by executing:
 
-    [user]
-            name = Your Name Comes Here
-            email = you@yourdomain.example.com
+[source,shell]
+----
+git config --global user.name "Your Name Comes Here"
+git config --global user.email you@yourdomain.example.com
+----
 
 === Adding a new module to contrib ===
 
