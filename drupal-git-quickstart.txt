@@ -44,7 +44,7 @@ git commit -m "Starting yourawesomemodule"
 
 ==== Making your module avalaible in git.drupal.org ====
 
-1. create a module project page(that will handle the creeation of your empty repo in git.drupal.org)
+1. create a module project page(that will handle the creation of your empty repo in git.drupal.org)
 
 2. Actually push your changes
 
@@ -72,9 +72,11 @@ If you're adding some new files you need to do this before commiting:
 git add file1.inc images/image1.png
 ----
 
+A commit stores the changes that you make to your project together with a descriptive commit message. Commits are local to your own repository (i.e. only present on your harddisk) until you push them back to the official project repository on drupal.org in a separate step.
+
 === Obtaining latest changes ===
 
-Both before you begin editing and before you save your changes, it's a good idea to grab the latest changes from git with the update command:
+Both before you begin editing and before you save your changes, it's a good idea to grab the latest changes from git with the 'pull' command:
 
 [source,shell]
 ----
