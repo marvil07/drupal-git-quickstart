@@ -1,0 +1,7 @@
+This is an attempt to make git analogous documention to the already
+existing CVS docs on drupal.org
+
+Asumptions
+
+- A gitosis like workflow.
+- Try to point only the simple way to do things.
